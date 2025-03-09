@@ -1,18 +1,17 @@
-﻿using System;
+﻿using R3;
 using UnityEngine;
-using static UnityEngine.Object;
 public class MainMenuEntryPoint : MonoBehaviour
 {
-    public event Action GoToGamePlayRequested;
     [SerializeField] UIMainMenuRootBinder _sceneUIRootPrefab;
-    public void Run(UIRootView uiRoot)
+    public Observable<MainMenuExitParams>Run(UIRootView uiRoot, MainMenuEnterParams enterParams)
     {
         var uiScene = Instantiate(_sceneUIRootPrefab);
         uiRoot.AttachSceneUI(uiScene.gameObject);
-        uiScene.GoToGameplayButtonClick += () =>
-        {
-            GoToGamePlayRequested?.Invoke();
-        };
-
+        var exitSignalSubject = new Subject<Unit>();
+        uiScene.Bind(exitSignalSubject);
+        var gameplayEnterParams = new GameplayEnterParams("SaveFile", 1);
+        var mainMenuExitParams = new MainMenuExitParams(gameplayEnterParams);
+        var exitToGameplaySignal = exitSignalSubject.Select(_ => mainMenuExitParams);
+        return exitToGameplaySignal;
     }
 }

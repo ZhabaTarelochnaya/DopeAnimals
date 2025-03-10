@@ -14,7 +14,7 @@ public class UIRootView : MonoBehaviour
     {
         HideLoadingScreen();
     }
-    public void ShowLoagingScreen() => _loadingScreen.SetActive(true);
+    public void ShowLoadingScreen() => _loadingScreen.SetActive(true);
     public void HideLoadingScreen() => _loadingScreen.SetActive(false);
     public void AttachSceneUI(GameObject sceneUI)
     {

@@ -54,11 +54,14 @@ public class GameEntryPoint
 
     private IEnumerator LoadAndStartMainMenu(MainMenuEnterParams enterParams = null)
     {
+        _uiRoot.ShowLoagingScreen();
+        _cachedSceneContainer.Dispose();
         yield return LoadScene(SceneNames.Boot);
         yield return LoadScene(SceneNames.MainMenu);
         yield return null;
         var sceneEntryPoint = Object.FindFirstObjectByType<MainMenuEntryPoint>();
-        sceneEntryPoint.Run(_uiRoot, enterParams).Subscribe(mainMenuExitParams =>
+        var mainMenuContainer = _cachedSceneContainer = new DIContainer(_rootContainer);
+        sceneEntryPoint.Run(mainMenuContainer, enterParams).Subscribe(mainMenuExitParams =>
         {
             var targetSceneName = mainMenuExitParams.TargetSceneEnterParams.SceneName;
             if (targetSceneName == SceneNames.Gameplay)
@@ -72,12 +75,13 @@ public class GameEntryPoint
     private IEnumerator LoadAndStartGameplay(GameplayEnterParams enterParams)
     {
         _uiRoot.ShowLoagingScreen();
+        _cachedSceneContainer.Dispose();
         yield return LoadScene(SceneNames.Boot);
         yield return LoadScene(SceneNames.Gameplay);
         yield return null;
         var gameplayEntryPoint = Object.FindFirstObjectByType<GameplayEntryPoint>();
         var gameplayContainer = _cachedSceneContainer = new DIContainer(_rootContainer);
-        gameplayEntryPoint.Run(_uiRoot, enterParams).Subscribe(gameplayExitParams =>
+        gameplayEntryPoint.Run(gameplayContainer, enterParams).Subscribe(gameplayExitParams =>
         {
             _coroutines.StartCoroutine(LoadAndStartMainMenu(gameplayExitParams.MainMenuEnterParams));
         });

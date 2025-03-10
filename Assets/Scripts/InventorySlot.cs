@@ -17,6 +17,6 @@ public class InventorySlot : MonoBehaviour
         return _item;
     }
     public GameObject GetObject() => _item?.Model;
-    public EInteractableName GetItemName() => _item.Name;
+    public EItemName GetItemName() => _item.Name;
     public ECookingState GetCookingState() => _item.CookingState;
 }

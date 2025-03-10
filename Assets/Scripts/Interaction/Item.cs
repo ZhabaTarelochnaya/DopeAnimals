@@ -4,11 +4,11 @@ using UnityEngine;
 public class Item : ScriptableObject
 {
     [field: SerializeField] public GameObject Model { get; private set; }
-    [field: SerializeField] public EInteractableName Name { get; private set; }
+    [field: SerializeField] public EItemName Name { get; private set; }
     [field: SerializeField] public ECookingState CookingState { get; private set; }
     [field: SerializeField] public Color Color { get; private set; }
 }
-public enum EInteractableName
+public enum EItemName
 {
     None,
     AyahuascaLeaf,

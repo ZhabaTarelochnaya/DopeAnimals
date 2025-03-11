@@ -1,6 +1,6 @@
 ﻿using R3;
 
-public interface IInteractableStateProxy
+public interface IInteractableEntityProxy
 {
     public ReactiveProperty<bool> IsInteractable { get; }
 }

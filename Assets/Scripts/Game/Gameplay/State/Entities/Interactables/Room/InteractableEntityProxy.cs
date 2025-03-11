@@ -2,10 +2,10 @@
 using System;
 using UnityEngine;
 
-public class InteractableStateProxy : IInteractableStateProxy
+public class InteractableEntityProxy : IInteractableEntityProxy
 {
     public ReactiveProperty<bool> IsInteractable { get; }
-    public InteractableStateProxy(IInteractableState interactableState)
+    public InteractableEntityProxy(IInteractableEntity interactableState)
     {
         IsInteractable = new ReactiveProperty<bool>(interactableState.IsInteractable);
 

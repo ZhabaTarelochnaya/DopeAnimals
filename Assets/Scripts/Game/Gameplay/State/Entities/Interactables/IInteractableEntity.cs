@@ -1,5 +1,5 @@
 ﻿
-public interface IInteractableState
+public interface IInteractableEntity : IEntity
 {
     public bool IsInteractable { get; set; }
 }

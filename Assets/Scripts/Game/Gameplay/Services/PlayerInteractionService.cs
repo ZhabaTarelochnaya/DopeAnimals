@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerInteractionService
 {
-    public PlayerInteractionService(IObservable<IInteractableStateProxy> interactables)
+    public PlayerInteractionService(IObservable<IInteractableEntityProxy> interactables)
     {
 
     }

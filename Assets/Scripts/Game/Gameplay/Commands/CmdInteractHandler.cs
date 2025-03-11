@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class CmdInteractHandler : ICommandHandler<CmdInteract>
 {
-    IInteractableStateProxy _interactableStateProxy;
-    public CmdInteractHandler(IInteractableStateProxy interactableStateProxy)
+    IInteractableEntityProxy _interactableStateProxy;
+    public CmdInteractHandler(IInteractableEntityProxy interactableStateProxy)
     {
         _interactableStateProxy = interactableStateProxy;
     }

@@ -6,6 +6,8 @@ using static UnityEngine.UI.Image;
 public class InteractableEntityProxy : IInteractableEntityProxy
 {
     public int Id { get; }
+
+    public string InteractableTypeId { get; }
     public IInteractableEntity Origin { get; }
     public ReactiveProperty<bool> IsInteractable { get; }
 

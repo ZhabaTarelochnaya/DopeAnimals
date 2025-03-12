@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CommandProcessor : ICommandProcessor
 {
-    private readonly Dictionary<Type, object> _handlesMap = new();
+    readonly Dictionary<Type, object> _handlesMap = new();
 
     public CommandProcessor() { }
 

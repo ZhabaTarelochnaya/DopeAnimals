@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEngine;
 
-public class CmdInteract : ICommand
+public class CmdRemoveInteractable : ICommand
 {
     public int Id { get; }
-    public CmdInteract(int id)
+    public CmdRemoveInteractable(int id)
     {
         Id = id;
     }

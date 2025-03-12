@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEngine;
 
-public class CmdInteractHandler : ICommandHandler<CmdInteract>
+public class CmdRemoveInteractableHandler : ICommandHandler<CmdInteract>
 {
     readonly GameStateProxy _gameState;
-    public CmdInteractHandler(GameStateProxy gameState)
+    public CmdRemoveInteractableHandler(GameStateProxy gameState)
     {
         _gameState = gameState;
     }
@@ -15,12 +15,11 @@ public class CmdInteractHandler : ICommandHandler<CmdInteract>
         {
             if (interactable.Id == command.Id && interactable.IsInteractable.Value)
             {
-
+                _gameState.Interactables.Remove(interactable);
                 return true;
             }
         }
         Debug.Log($"Entity with id {command.Id} does not exist");
         return false;
     }
-
 }

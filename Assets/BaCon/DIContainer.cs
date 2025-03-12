@@ -86,5 +86,14 @@ namespace BaCon
             
             throw new Exception($"Couldn't find dependency for tag {tag} and type {key.Item2.FullName}");
         }
+        public void Dispose()
+        {
+            var enries = _entriesMap.Values;
+
+            foreach (var entry in enries)
+            {
+                entry.Dispose();
+            }
+        }
     }
 }

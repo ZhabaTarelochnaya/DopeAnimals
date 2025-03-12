@@ -27,6 +27,9 @@ public class GameEntryPoint
         _uiRoot = Object.Instantiate(prefabUIRoot);
         Object.DontDestroyOnLoad(_uiRoot.gameObject);
         _rootContainer.RegisterInstance(_uiRoot);
+
+        var gameStateProvider = new PlayerPrefsGameStateProvider();
+        _rootContainer.RegisterInstance<IGameStateProvider>(gameStateProvider);
     }
     void RunGame()
     {
@@ -72,12 +75,16 @@ public class GameEntryPoint
     private IEnumerator LoadAndStartGameplay(GameplayEnterParams enterParams)
     {
         _uiRoot.ShowLoagingScreen();
+        _cachedSceneContainer?.Dispose();
+
         yield return LoadScene(SceneNames.Boot);
         yield return LoadScene(SceneNames.Gameplay);
         yield return null;
+
+
         var gameplayEntryPoint = Object.FindFirstObjectByType<GameplayEntryPoint>();
         var gameplayContainer = _cachedSceneContainer = new DIContainer(_rootContainer);
-        gameplayEntryPoint.Run(_uiRoot, enterParams).Subscribe(gameplayExitParams =>
+        gameplayEntryPoint.Run(gameplayContainer, enterParams).Subscribe(gameplayExitParams =>
         {
             _coroutines.StartCoroutine(LoadAndStartMainMenu(gameplayExitParams.MainMenuEnterParams));
         });

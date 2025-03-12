@@ -1,4 +1,5 @@
-﻿using ObservableCollections;
+﻿using BaCon;
+using ObservableCollections;
 using R3;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +11,8 @@ public class PlayerInteractionService
     readonly Dictionary<int, InteractableViewModel> _interactableMap = new();
     public IObservableCollection<InteractableViewModel> AllInteractables => _allInteractables;
 
-    public PlayerInteractionService(ObservableList<IInteractableEntityProxy> interactables, ICommandProcessor cmd)
+    public PlayerInteractionService(ObservableList<IInteractableEntityProxy> interactables, 
+        ICommandProcessor cmd)
     {
         _cmd = cmd;
         foreach (var interactable in interactables)
@@ -40,12 +42,16 @@ public class PlayerInteractionService
             _allInteractables.Remove(interactableViewModel);
         }
     }
-    public bool Interact(int Id)
+    public bool Interact(int Id, string interactableTypeId)
     {
-        return _cmd.Process(new CmdInteract(Id));
+        return _cmd.Process(new CmdInteract(Id, interactableTypeId));
     }
     public bool PlaceInteractable(string interactableTypeId, Vector3 position, bool isInteractable = true)
     {
         return _cmd.Process(new CmdPlaceInteractable(interactableTypeId, position, isInteractable));
+    }
+    public bool RemoveInteractable(int Id)
+    {
+        return _cmd.Process(new CmdRemoveInteractable(Id));
     }
 }

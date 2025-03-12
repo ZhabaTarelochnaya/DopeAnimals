@@ -3,13 +3,9 @@ using UnityEngine;
 
 public class CmdInteract : ICommand
 {
-    public Vector3 Position { get; }
-    public bool IsInteractable { get; }
-    public void Interact(InteractableEntityProxy interactableStateProxy)
+    public int Id { get; }
+    public CmdInteract(int id)
     {
-        if (interactableStateProxy.IsInteractable.Value)
-        {
-            
-        }
+        Id = id;
     }
 }

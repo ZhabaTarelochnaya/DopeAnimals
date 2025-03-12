@@ -1,4 +1,4 @@
-﻿
+﻿using System.Linq;
 using R3;
 using ObservableCollections;
 public class GameStateProxy
@@ -13,6 +13,12 @@ public class GameStateProxy
         {
             var addedInteractableEntity = e.Value;
             gameState.Interactables.Add(addedInteractableEntity.Origin);
+        });
+        Interactables.ObserveRemove().Subscribe(e =>
+        {
+            var removedInteractable = e.Value;
+            var removedMapState = gameState.Interactables.FirstOrDefault(b => b.Id == removedInteractable.Id);
+            gameState.Interactables.Remove(removedMapState);
         });
     }
     public int GetEntityId() => _gameState.GlobalEntityId++;

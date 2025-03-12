@@ -11,16 +11,16 @@ public class CmdInteractHandler : ICommandHandler<CmdInteract>
 
     public bool Handle(CmdInteract command)
     {
-        var entityId = _gameState.GetEntityId();
-        var interactableEntity = new InteractableEntity
+        foreach (IInteractableEntityProxy interactable in _gameState.Interactables)
         {
-            Id = entityId,
-            Position = command.Position,
-            IsInteractable = command.IsInteractable,
-        };
-        var newInteractableEntityProxy = new InteractableEntityProxy(interactableEntity);
-        _gameState.Interactables.Add(newInteractableEntityProxy);
-        return true;
+            if (interactable.Id == command.Id && interactable.IsInteractable.Value)
+            {
+
+                return true;
+            }
+        }
+        Debug.Log($"Entity with id {command.Id} does not exist");
+        return false;
     }
 
 }

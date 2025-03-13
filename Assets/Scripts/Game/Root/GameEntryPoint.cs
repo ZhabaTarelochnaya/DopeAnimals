@@ -81,6 +81,10 @@ public class GameEntryPoint
         yield return LoadScene(SceneNames.Gameplay);
         yield return null;
 
+        var isGameStateLoaded = false;
+        _rootContainer.Resolve<IGameStateProvider>().
+            LoadGameState().Subscribe(_ => isGameStateLoaded = true);
+        yield return new WaitUntil(() => isGameStateLoaded);
 
         var gameplayEntryPoint = Object.FindFirstObjectByType<GameplayEntryPoint>();
         var gameplayContainer = _cachedSceneContainer = new DIContainer(_rootContainer);

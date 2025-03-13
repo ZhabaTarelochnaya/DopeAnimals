@@ -15,7 +15,8 @@ public class CmdInteractHandler : ICommandHandler<CmdInteract>
         {
             if (interactable.Id == command.Id && interactable.IsInteractable.Value)
             {
-                _gameState.
+                // Replace later with dependant on BuildingTypeId logic
+                Debug.Log($"Interaction with entity {command.Id}");
                 return true;
             }
         }

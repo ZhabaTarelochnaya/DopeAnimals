@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class InteractableViewModel
 {
-    public InteractableViewModel(IInteractableEntityProxy interactableEntity)
+    public InteractableViewModel(IInteractableEntity interactableEntity)
     {
         
     }

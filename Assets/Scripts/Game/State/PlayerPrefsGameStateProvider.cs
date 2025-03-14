@@ -9,13 +9,13 @@ public class PlayerPrefsGameStateProvider : IGameStateProvider
     private const string GAME_STATE_KEY = nameof(GAME_STATE_KEY);
     private const string GAME_SETTINGS_STATE_KEY = nameof(GAME_SETTINGS_STATE_KEY);
 
-    public GameStateProxy GameState { get; private set; }
-    public GameSettingsStateProxy SettingsState { get; private set; }
+    public Game GameState { get; private set; }
+    public GameSettings SettingsState { get; private set; }
 
     private GameState _gameStateOrigin;
     private GameSettingsState _gameSettingsStateOrigin;
 
-    public Observable<GameStateProxy> LoadGameState()
+    public Observable<Game> LoadGameState()
     {
         if (!PlayerPrefs.HasKey(GAME_STATE_KEY))
         {
@@ -27,7 +27,7 @@ public class PlayerPrefsGameStateProvider : IGameStateProvider
         {
             var json = PlayerPrefs.GetString(GAME_STATE_KEY);
             _gameStateOrigin = JsonUtility.FromJson<GameState>(json);
-            GameState = new GameStateProxy(_gameStateOrigin);
+            GameState = new Game(_gameStateOrigin);
 
             Debug.Log("Game State loaded: " + json);
         }
@@ -35,7 +35,7 @@ public class PlayerPrefsGameStateProvider : IGameStateProvider
         return Observable.Return(GameState);
     }
 
-    public Observable<GameSettingsStateProxy> LoadSettingsState()
+    public Observable<GameSettings> LoadSettingsState()
     {
         if (!PlayerPrefs.HasKey(GAME_SETTINGS_STATE_KEY))
         {
@@ -46,7 +46,7 @@ public class PlayerPrefsGameStateProvider : IGameStateProvider
         {
             var json = PlayerPrefs.GetString(GAME_SETTINGS_STATE_KEY);
             _gameSettingsStateOrigin = JsonUtility.FromJson<GameSettingsState>(json);
-            SettingsState = new GameSettingsStateProxy(_gameSettingsStateOrigin);
+            SettingsState = new GameSettings(_gameSettingsStateOrigin);
         }
 
         return Observable.Return(SettingsState);
@@ -76,7 +76,7 @@ public class PlayerPrefsGameStateProvider : IGameStateProvider
         return Observable.Return(true);
     }
 
-    public Observable<GameSettingsStateProxy> ResetSettingsState()
+    public Observable<GameSettings> ResetSettingsState()
     {
         SettingsState = CreateGameSettingsStateFromSettings();
         SaveSettingsState();
@@ -84,14 +84,14 @@ public class PlayerPrefsGameStateProvider : IGameStateProvider
         return Observable.Return(SettingsState);
     }
 
-    private GameStateProxy CreateGameStateFromSettings()
+    private Game CreateGameStateFromSettings()
     {
         // Settings needed
         _gameStateOrigin = new GameState();
-        return new GameStateProxy(_gameStateOrigin);
+        return new Game(_gameStateOrigin);
     }
 
-    private GameSettingsStateProxy CreateGameSettingsStateFromSettings()
+    private GameSettings CreateGameSettingsStateFromSettings()
     {
         // Состояние по умолчанию из настроек, мы делаем фейк
         _gameSettingsStateOrigin = new GameSettingsState()
@@ -100,6 +100,6 @@ public class PlayerPrefsGameStateProvider : IGameStateProvider
             SFXVolume = 8
         };
 
-        return new GameSettingsStateProxy(_gameSettingsStateOrigin);
+        return new GameSettings(_gameSettingsStateOrigin);
     }
 }

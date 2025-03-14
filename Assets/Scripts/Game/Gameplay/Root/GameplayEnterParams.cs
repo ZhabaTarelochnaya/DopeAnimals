@@ -1,15 +1,10 @@
 ﻿
 public class GameplayEnterParams : ISceneParams
 {
-    SceneEnterParams _sceneEnterParams;
-    public string SaveFileName { get; }
-    public int LevelNumber { get; }
-    public string SceneName => SceneNames.Gameplay;
+    public int LevelId { get; }
 
-    public GameplayEnterParams(string saveFileName, int levelNumber)
+    public GameplayEnterParams(int levelId)
     {
-        _sceneEnterParams = new SceneEnterParams(SceneNames.Gameplay);
-        SaveFileName = saveFileName;
-        LevelNumber = levelNumber;
+        LevelId = levelId;
     }
 }

@@ -1,7 +1,9 @@
-﻿using UnityEngine;
-public interface IInteractableEntity : IEntity
+﻿using R3;
+using UnityEngine;
+
+public interface IInteractableEntity : IEntityProxy
 {
-    public string InteractableTypeID { get; set; }
-    public bool IsInteractable { get; set; }
-    public Vector3 Position { get; set; }
+    public IInteractableEntityState Origin { get; }
+    public ReactiveProperty<bool> IsInteractable { get; }
+    public ReactiveProperty<Vector3> Position { get; }
 }

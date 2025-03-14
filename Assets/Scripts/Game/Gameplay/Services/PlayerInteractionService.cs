@@ -11,7 +11,7 @@ public class PlayerInteractionService
     readonly Dictionary<int, InteractableViewModel> _interactableMap = new();
     public IObservableCollection<InteractableViewModel> AllInteractables => _allInteractables;
 
-    public PlayerInteractionService(ObservableList<IInteractableEntityProxy> interactables, 
+    public PlayerInteractionService(ObservableList<IInteractableEntity> interactables, 
         ICommandProcessor cmd)
     {
         _cmd = cmd;
@@ -28,13 +28,13 @@ public class PlayerInteractionService
             RemoveInteractableViewModel(e.Value);
         });
     }
-    void CreateInteractableViewModel(IInteractableEntityProxy interactableEntity)
+    void CreateInteractableViewModel(IInteractableEntity interactableEntity)
     {
         var interacctableViewModel = new InteractableViewModel(interactableEntity);
         _interactableMap[interactableEntity.Id] = interacctableViewModel;
         _allInteractables.Add(interacctableViewModel);
     }
-    void RemoveInteractableViewModel(IInteractableEntityProxy interactableEntity)
+    void RemoveInteractableViewModel(IInteractableEntity interactableEntity)
     {
         if (_interactableMap.TryGetValue(interactableEntity.Id, out var interactableViewModel))
         {

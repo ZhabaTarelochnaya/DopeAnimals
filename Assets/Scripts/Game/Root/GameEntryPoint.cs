@@ -11,6 +11,7 @@ public class GameEntryPoint
     UIRootView _uiRoot;
     readonly DIContainer _rootContainer = new();
     DIContainer _cachedSceneContainer;
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void AutostartGame()
     {
@@ -28,16 +29,20 @@ public class GameEntryPoint
         Object.DontDestroyOnLoad(_uiRoot.gameObject);
         _rootContainer.RegisterInstance(_uiRoot);
 
+        var settingsProvider = new SettingsProvider();
+        _rootContainer.RegisterInstance<ISettingsProvider>(settingsProvider);
+
         var gameStateProvider = new PlayerPrefsGameStateProvider();
         _rootContainer.RegisterInstance<IGameStateProvider>(gameStateProvider);
     }
-    void RunGame()
+    async void RunGame()
     {
+        await _rootContainer.Resolve<ISettingsProvider>().LoadGameSettings();
 #if UNITY_EDITOR
         var sceneName = SceneManager.GetActiveScene().name;
         if (sceneName == SceneNames.Gameplay)
         {
-            var enterParams = new GameplayEnterParams("SaveFile", 1);
+            var enterParams = new GameplayEnterParams(0);
             _coroutines.StartCoroutine(LoadAndStartGameplay(enterParams));
             return;
         }

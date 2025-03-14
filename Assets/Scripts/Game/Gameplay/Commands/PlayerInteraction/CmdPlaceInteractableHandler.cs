@@ -1,26 +1,33 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 
 public class CmdPlaceInteractableHandler : ICommandHandler<CmdPlaceInteractable>
 {
-    readonly GameStateProxy _gameState;
-    public CmdPlaceInteractableHandler(GameStateProxy gameState)
+    readonly Game _gameState;
+    public CmdPlaceInteractableHandler(Game gameState)
     {
         _gameState = gameState;
     }
 
     public bool Handle(CmdPlaceInteractable command)
     {
-        var entityId = _gameState.GetEntityId();
-        var newInteractableEntity = new InteractableEntity
+        var currentLevel = _gameState.Levels.FirstOrDefault(l => l.Id == _gameState.CurrentLevelId.CurrentValue);
+        if (currentLevel == null)
+        {
+            Debug.Log($"Couldn't find LevelState for id: {_gameState.CurrentLevelId.CurrentValue}");
+            return false;
+        }
+        var entityId = _gameState.CreateEntityId();
+        var newInteractableEntity = new InteractableEntityState
         {
             Id = entityId,
             Position = command.Position,
-            InteractableTypeID = command.InteractableTypeId,
+            TypeId = command.InteractableTypeId,
             IsInteractable = command.IsInteractable
         };
-        var newInteractableEntityProxy = new InteractableEntityProxy(newInteractableEntity);
-        _gameState.Interactables.Add(newInteractableEntityProxy);
+        var newInteractableEntityProxy = new InteractableEntity(newInteractableEntity);
+        currentLevel.Interactables.Add(newInteractableEntityProxy);
         return true;
     }
 

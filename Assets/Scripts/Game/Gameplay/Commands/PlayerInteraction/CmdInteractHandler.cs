@@ -3,15 +3,15 @@ using UnityEngine;
 
 public class CmdInteractHandler : ICommandHandler<CmdInteract>
 {
-    readonly GameStateProxy _gameState;
-    public CmdInteractHandler(GameStateProxy gameState)
+    readonly Game _gameState;
+    public CmdInteractHandler(Game gameState)
     {
         _gameState = gameState;
     }
 
     public bool Handle(CmdInteract command)
     {
-        foreach (IInteractableEntityProxy interactable in _gameState.Interactables)
+        foreach (IInteractableEntity interactable in _gameState.Interactables)
         {
             if (interactable.Id == command.Id && interactable.IsInteractable.Value)
             {

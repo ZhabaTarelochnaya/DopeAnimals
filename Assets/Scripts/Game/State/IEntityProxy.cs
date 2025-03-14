@@ -1,5 +1,4 @@
-﻿
-public interface IEntityProxy
+﻿public interface IEntityProxy
 {
     public int Id { get; }
 }

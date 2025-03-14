@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class CmdCreateLevelStateHandler : ICommandHandler<CmdCreateLevelState>
 {
-    private readonly Game _game;
-    private readonly GameSettings _gameSettings;
+    readonly Game _game;
+    readonly GameSettings _gameSettings;
 
     public CmdCreateLevelStateHandler(Game gameState, GameSettings gameSettings)
     {
@@ -15,7 +15,7 @@ public class CmdCreateLevelStateHandler : ICommandHandler<CmdCreateLevelState>
 
     public bool Handle(CmdCreateLevelState command)
     {
-        var isMapAlreadyExisted = _game.Levels.Any(m => m.Id == command.LevelId);
+        bool isMapAlreadyExisted = _game.Levels.Any(m => m.Id == command.LevelId);
 
         if (isMapAlreadyExisted)
         {
@@ -23,11 +23,11 @@ public class CmdCreateLevelStateHandler : ICommandHandler<CmdCreateLevelState>
             return false;
         }
 
-        var newLevelSettings = _gameSettings.LevelsSettings.Levels.First(l => l.Id == command.LevelId);
-        var newLevelInitialStateSettings = newLevelSettings.InitialStateSettings;
+        LevelSettings newLevelSettings = _gameSettings.LevelsSettings.Levels.First(l => l.Id == command.LevelId);
+        LevelInitialStateSettings newLevelInitialStateSettings = newLevelSettings.InitialStateSettings;
 
         var initialInteractables = new List<IInteractableEntityState>();
-        foreach (var interactableSettings in newLevelInitialStateSettings.Interactables)
+        foreach (InteractableInitialStateSettings interactableSettings in newLevelInitialStateSettings.Interactables)
         {
             var initialInteractable = new InteractableEntityState
             {

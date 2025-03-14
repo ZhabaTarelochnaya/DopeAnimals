@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class CommandProcessor : ICommandProcessor
 {
     readonly Dictionary<Type, object> _handlesMap = new();
-
-    public CommandProcessor() { }
 
     public void RegisterHandler<TCommand>(ICommandHandler<TCommand> handler) where TCommand : ICommand
     {
@@ -15,10 +12,10 @@ public class CommandProcessor : ICommandProcessor
 
     public bool Process<TCommand>(TCommand command) where TCommand : ICommand
     {
-        if (_handlesMap.TryGetValue(typeof(TCommand), out var handler))
+        if (_handlesMap.TryGetValue(typeof(TCommand), out object handler))
         {
             var typedHandler = (ICommandHandler<TCommand>)handler;
-            var result = typedHandler.Handle(command);
+            bool result = typedHandler.Handle(command);
             return result;
         }
 

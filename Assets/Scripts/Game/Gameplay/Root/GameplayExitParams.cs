@@ -1,8 +1,8 @@
 ﻿public class GameplayExitParams
 {
-    public MainMenuEnterParams MainMenuEnterParams { get; }
     public GameplayExitParams(MainMenuEnterParams mainMenuEntryParams)
     {
         MainMenuEnterParams = mainMenuEntryParams;
     }
+    public MainMenuEnterParams MainMenuEnterParams { get; }
 }

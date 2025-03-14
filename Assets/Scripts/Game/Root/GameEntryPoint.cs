@@ -1,24 +1,16 @@
 ﻿using System.Collections;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 using BaCon;
 using R3;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameEntryPoint
 {
     static GameEntryPoint _instance;
-    Coroutines _coroutines;
-    UIRootView _uiRoot;
+    readonly Coroutines _coroutines;
     readonly DIContainer _rootContainer = new();
+    readonly UIRootView _uiRoot;
     DIContainer _cachedSceneContainer;
-
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    public static void AutostartGame()
-    {
-        _instance = new GameEntryPoint();
-        var sceneEnterParams = new SceneEnterParams(SceneNames.Gameplay);
-        _instance.RunGame();
-    }
     GameEntryPoint()
     {
         _coroutines = new GameObject("[COROUTINES]").AddComponent<Coroutines>();
@@ -35,32 +27,41 @@ public class GameEntryPoint
         var gameStateProvider = new PlayerPrefsGameStateProvider();
         _rootContainer.RegisterInstance<IGameStateProvider>(gameStateProvider);
     }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    public static void AutostartGame()
+    {
+        _instance = new GameEntryPoint();
+        var sceneEnterParams = new SceneEnterParams(SceneNames.Gameplay);
+        _instance.RunGame();
+    }
     async void RunGame()
     {
         await _rootContainer.Resolve<ISettingsProvider>().LoadGameSettings();
 #if UNITY_EDITOR
-        var sceneName = SceneManager.GetActiveScene().name;
+        string sceneName = SceneManager.GetActiveScene().name;
         if (sceneName == SceneNames.Gameplay)
         {
             var enterParams = new GameplayEnterParams(0);
             _coroutines.StartCoroutine(LoadAndStartGameplay(enterParams));
             return;
         }
+
         if (sceneName == SceneNames.MainMenu)
         {
             _coroutines.StartCoroutine(LoadAndStartMainMenu());
             return;
         }
+
         if (sceneName != SceneNames.Boot)
         {
             return;
         }
 #endif
         _coroutines.StartCoroutine(LoadAndStartMainMenu());
-
     }
 
-    private IEnumerator LoadAndStartMainMenu(MainMenuEnterParams enterParams = null)
+    IEnumerator LoadAndStartMainMenu(MainMenuEnterParams enterParams = null)
     {
         yield return LoadScene(SceneNames.Boot);
         yield return LoadScene(SceneNames.MainMenu);
@@ -68,7 +69,7 @@ public class GameEntryPoint
         var sceneEntryPoint = Object.FindFirstObjectByType<MainMenuEntryPoint>();
         sceneEntryPoint.Run(_uiRoot, enterParams).Subscribe(mainMenuExitParams =>
         {
-            var targetSceneName = mainMenuExitParams.TargetSceneEnterParams.SceneName;
+            string targetSceneName = mainMenuExitParams.TargetSceneEnterParams.SceneName;
             if (targetSceneName == SceneNames.Gameplay)
             {
                 _coroutines.StartCoroutine(LoadAndStartGameplay(
@@ -77,7 +78,7 @@ public class GameEntryPoint
         });
     }
 
-    private IEnumerator LoadAndStartGameplay(GameplayEnterParams enterParams)
+    IEnumerator LoadAndStartGameplay(GameplayEnterParams enterParams)
     {
         _uiRoot.ShowLoagingScreen();
         _cachedSceneContainer?.Dispose();
@@ -87,12 +88,11 @@ public class GameEntryPoint
         yield return null;
 
         var isGameStateLoaded = false;
-        _rootContainer.Resolve<IGameStateProvider>().
-            LoadGameState().Subscribe(_ => isGameStateLoaded = true);
+        _rootContainer.Resolve<IGameStateProvider>().LoadGameState().Subscribe(_ => isGameStateLoaded = true);
         yield return new WaitUntil(() => isGameStateLoaded);
 
         var gameplayEntryPoint = Object.FindFirstObjectByType<GameplayEntryPoint>();
-        var gameplayContainer = _cachedSceneContainer = new DIContainer(_rootContainer);
+        DIContainer gameplayContainer = _cachedSceneContainer = new DIContainer(_rootContainer);
         gameplayEntryPoint.Run(gameplayContainer, enterParams).Subscribe(gameplayExitParams =>
         {
             _coroutines.StartCoroutine(LoadAndStartMainMenu(gameplayExitParams.MainMenuEnterParams));

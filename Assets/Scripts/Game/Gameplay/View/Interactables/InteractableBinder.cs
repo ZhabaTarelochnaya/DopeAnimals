@@ -1,7 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class InteractableBinder : MonoBehaviour 
+public class InteractableBinder : MonoBehaviour
 {
     public void Bind(InteractableViewModel viewModel)
     {

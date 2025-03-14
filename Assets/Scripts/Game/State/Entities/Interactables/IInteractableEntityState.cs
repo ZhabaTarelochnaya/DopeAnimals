@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+
 public interface IInteractableEntityState : IEntity
 {
     public string TypeId { get; set; }

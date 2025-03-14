@@ -5,24 +5,21 @@ namespace BaCon
 {
     public class DIContainer
     {
-        private readonly DIContainer _parentContainer;
-        private readonly Dictionary<(string, Type), DIEntry> _entriesMap = new();
-        private readonly HashSet<(string, Type)> _resolutionsCache = new();
+        readonly Dictionary<(string, Type), DIEntry> _entriesMap = new();
+        readonly DIContainer _parentContainer;
+        readonly HashSet<(string, Type)> _resolutionsCache = new();
 
         public DIContainer(DIContainer parentContainer = null)
         {
             _parentContainer = parentContainer;
         }
 
-        public DIEntry RegisterFactory<T>(Func<DIContainer, T> factory)
-        {
-            return RegisterFactory(null, factory);
-        }
+        public DIEntry RegisterFactory<T>(Func<DIContainer, T> factory) => RegisterFactory(null, factory);
 
         public DIEntry RegisterFactory<T>(string tag, Func<DIContainer, T> factory)
         {
-            var key = (tag, typeof(T));
-            
+            (string tag, Type) key = (tag, typeof(T));
+
             if (_entriesMap.ContainsKey(key))
             {
                 throw new Exception(
@@ -43,8 +40,8 @@ namespace BaCon
 
         public void RegisterInstance<T>(string tag, T instance)
         {
-            var key = (tag, typeof(T));
-            
+            (string tag, Type) key = (tag, typeof(T));
+
             if (_entriesMap.ContainsKey(key))
             {
                 throw new Exception(
@@ -58,7 +55,7 @@ namespace BaCon
 
         public T Resolve<T>(string tag = null)
         {
-            var key = (tag, typeof(T));
+            (string tag, Type) key = (tag, typeof(T));
 
             if (_resolutionsCache.Contains(key))
             {
@@ -69,7 +66,7 @@ namespace BaCon
 
             try
             {
-                if (_entriesMap.TryGetValue(key, out var diEntry))
+                if (_entriesMap.TryGetValue(key, out DIEntry diEntry))
                 {
                     return diEntry.Resolve<T>();
                 }
@@ -82,15 +79,15 @@ namespace BaCon
             finally
             {
                 _resolutionsCache.Remove(key);
-            } 
-            
+            }
+
             throw new Exception($"Couldn't find dependency for tag {tag} and type {key.Item2.FullName}");
         }
         public void Dispose()
         {
-            var enries = _entriesMap.Values;
+            Dictionary<(string, Type), DIEntry>.ValueCollection enries = _entriesMap.Values;
 
-            foreach (var entry in enries)
+            foreach (DIEntry entry in enries)
             {
                 entry.Dispose();
             }

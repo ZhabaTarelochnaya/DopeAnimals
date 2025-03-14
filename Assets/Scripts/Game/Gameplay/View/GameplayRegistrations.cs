@@ -1,14 +1,13 @@
-﻿using BaCon;
-using System;
+﻿using System;
 using System.Linq;
-using UnityEngine;
+using BaCon;
 
 public static class GameplayRegistrations
 {
     public static void Register(DIContainer container, GameplayEnterParams enterParams)
     {
         var gameStateProvider = container.Resolve<PlayerPrefsGameStateProvider>();
-        var gameState = gameStateProvider.GameState;
+        Game gameState = gameStateProvider.GameState;
         var settingsProviider = container.Resolve<ISettingsProvider>();
 
         var cmd = new CommandProcessor();
@@ -19,15 +18,16 @@ public static class GameplayRegistrations
         container.RegisterInstance<ICommandProcessor>(cmd);
 
         //Fix later. Level state should be loaded before scene load.
-        var loadingLevelId = enterParams.LevelId;
-        var loadingLevel = gameState.Levels.FirstOrDefault(l => l.Id == loadingLevelId);
+        int loadingLevelId = enterParams.LevelId;
+        Level loadingLevel = gameState.Levels.FirstOrDefault(l => l.Id == loadingLevelId);
         if (loadingLevel == null)
         {
             var command = new CmdCreateLevelState(loadingLevelId);
-            if(!cmd.Process(command))
+            if (!cmd.Process(command))
             {
                 throw new Exception($"Couldn't create level state with id: {loadingLevelId}");
             }
+
             loadingLevel = gameState.Levels.First(l => l.Id == loadingLevelId);
         }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 
 public class CmdPlaceInteractableHandler : ICommandHandler<CmdPlaceInteractable>
@@ -12,13 +11,14 @@ public class CmdPlaceInteractableHandler : ICommandHandler<CmdPlaceInteractable>
 
     public bool Handle(CmdPlaceInteractable command)
     {
-        var currentLevel = _gameState.Levels.FirstOrDefault(l => l.Id == _gameState.CurrentLevelId.CurrentValue);
+        Level currentLevel = _gameState.Levels.FirstOrDefault(l => l.Id == _gameState.CurrentLevelId.CurrentValue);
         if (currentLevel == null)
         {
             Debug.Log($"Couldn't find LevelState for id: {_gameState.CurrentLevelId.CurrentValue}");
             return false;
         }
-        var entityId = _gameState.CreateEntityId();
+
+        int entityId = _gameState.CreateEntityId();
         var newInteractableEntity = new InteractableEntityState
         {
             Id = entityId,
@@ -30,5 +30,4 @@ public class CmdPlaceInteractableHandler : ICommandHandler<CmdPlaceInteractable>
         currentLevel.Interactables.Add(newInteractableEntityProxy);
         return true;
     }
-
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-
+﻿using UnityEngine;
 
 public class UIRootView : MonoBehaviour
 {
@@ -24,7 +18,7 @@ public class UIRootView : MonoBehaviour
 
     void ClearSceneUI()
     {
-        for (int i = 0; i < _uiSceneContainer.childCount; i++)
+        for (var i = 0; i < _uiSceneContainer.childCount; i++)
         {
             Destroy(_uiSceneContainer.GetChild(i).gameObject);
         }

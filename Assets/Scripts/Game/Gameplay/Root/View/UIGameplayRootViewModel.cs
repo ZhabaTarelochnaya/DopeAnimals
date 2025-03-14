@@ -1,7 +1,3 @@
-﻿using System;
-using UnityEngine;
-
-public class UIGameplayRootViewModel
+﻿public class UIGameplayRootViewModel
 {
-   
 }

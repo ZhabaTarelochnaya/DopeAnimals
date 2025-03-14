@@ -4,20 +4,20 @@ namespace BaCon
 {
     public abstract class DIEntry : IDisposable
     {
-        protected DIContainer Container { get; }
-        protected bool IsSingleton { get; set; }
-
-        protected DIEntry() { }
+        protected DIEntry()
+        {
+        }
 
         protected DIEntry(DIContainer container)
         {
             Container = container;
         }
+        protected DIContainer Container { get; }
+        protected bool IsSingleton { get; set; }
 
-        public T Resolve<T>()
-        {
-            return ((DIEntry<T>)this).Resolve();
-        }
+        public abstract void Dispose();
+
+        public T Resolve<T>() => ((DIEntry<T>)this).Resolve();
 
         public DIEntry AsSingle()
         {
@@ -25,15 +25,12 @@ namespace BaCon
 
             return this;
         }
-
-        public abstract void Dispose();
     }
 
     public class DIEntry<T> : DIEntry
     {
-        private Func<DIContainer, T> Factory { get; }
-        private T _instance;
-        private IDisposable _disposableInstance;
+        IDisposable _disposableInstance;
+        T _instance;
 
         public DIEntry(DIContainer container, Func<DIContainer, T> factory) : base(container)
         {
@@ -51,6 +48,7 @@ namespace BaCon
 
             IsSingleton = true;
         }
+        Func<DIContainer, T> Factory { get; }
 
         public T Resolve()
         {

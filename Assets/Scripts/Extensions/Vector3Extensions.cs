@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
-internal static class Vector3Extensions
+
+static class Vector3Extensions
 {
     public static void AddVector2(this Vector3 vec3, Vector2 vec2)
     {

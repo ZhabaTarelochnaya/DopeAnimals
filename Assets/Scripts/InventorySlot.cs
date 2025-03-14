@@ -3,7 +3,7 @@ using UnityEngine;
 public class InventorySlot : MonoBehaviour
 {
     Item _item;
-    public bool IsEmpty {  get; private set; }
+    public bool IsEmpty { get; private set; }
     public void Fill(Item item)
     {
         _item = item;

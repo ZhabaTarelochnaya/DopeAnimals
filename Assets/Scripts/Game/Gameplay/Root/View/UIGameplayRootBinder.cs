@@ -1,13 +1,10 @@
-﻿using R3;
-using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class UIGameplayRootBinder : MonoBehaviour
 {
     UIGameplayRootViewModel _viewModel;
     public void HandleGoToGameplayButtonClick()
     {
-
         //_exitSceneSignalSubject?.OnNext(Unit.Default);
     }
     public void Bind(UIGameplayRootViewModel viewModel)

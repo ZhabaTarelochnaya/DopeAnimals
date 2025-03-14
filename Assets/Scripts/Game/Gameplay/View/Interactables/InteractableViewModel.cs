@@ -1,5 +1,4 @@
 ﻿using R3;
-using System;
 using UnityEngine;
 
 public class InteractableViewModel
@@ -8,7 +7,6 @@ public class InteractableViewModel
     readonly PlayerInteractionService _playerInteractionService;
 
     public readonly int Id;
-    public ReadOnlyReactiveProperty<Vector3> Position { get; }
 
     public InteractableViewModel(IInteractableEntity interactableEntity, PlayerInteractionService interactionService)
     {
@@ -18,5 +16,5 @@ public class InteractableViewModel
         Id = interactableEntity.Id;
         Position = interactableEntity.Position;
     }
+    public ReadOnlyReactiveProperty<Vector3> Position { get; }
 }
- 

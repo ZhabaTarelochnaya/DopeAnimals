@@ -1,5 +1,4 @@
-﻿
-internal interface IInteractable
+﻿interface IInteractable
 {
     public bool IsInteractable { get; }
     public void Interact();

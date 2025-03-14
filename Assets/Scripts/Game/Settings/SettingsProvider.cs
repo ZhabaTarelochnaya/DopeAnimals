@@ -1,23 +1,19 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using UnityEngine;
 
 public class SettingsProvider : ISettingsProvider
 {
-    public GameSettings GameSettings => _gameSettings;
-    public ApplicationSettings ApplicationSettings { get; }
-
-    private GameSettings _gameSettings;
-
     public SettingsProvider()
     {
         ApplicationSettings = Resources.Load<ApplicationSettings>("ApplicationSettings");
     }
+    public GameSettings GameSettings { get; private set; }
+    public ApplicationSettings ApplicationSettings { get; }
 
     public Task<GameSettings> LoadGameSettings()
     {
-        _gameSettings = Resources.Load<GameSettings>("GameSettings");
+        GameSettings = Resources.Load<GameSettings>("GameSettings");
 
-        return Task.FromResult(_gameSettings);
+        return Task.FromResult(GameSettings);
     }
 }

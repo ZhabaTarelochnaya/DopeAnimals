@@ -1,19 +1,16 @@
-﻿using Mono.Cecil;
-using R3;
-using System.Collections.Generic;
-using System.Net.NetworkInformation;
+﻿using R3;
 using UnityEngine;
 
 public class PlayerPrefsGameStateProvider : IGameStateProvider
 {
-    private const string GAME_STATE_KEY = nameof(GAME_STATE_KEY);
-    private const string GAME_SETTINGS_STATE_KEY = nameof(GAME_SETTINGS_STATE_KEY);
+    const string GAME_STATE_KEY = nameof(GAME_STATE_KEY);
+    const string GAME_SETTINGS_STATE_KEY = nameof(GAME_SETTINGS_STATE_KEY);
+    GameSettingsState _gameSettingsStateOrigin;
+
+    GameState _gameStateOrigin;
 
     public Game GameState { get; private set; }
     public GameSettings SettingsState { get; private set; }
-
-    private GameState _gameStateOrigin;
-    private GameSettingsState _gameSettingsStateOrigin;
 
     public Observable<Game> LoadGameState()
     {
@@ -25,7 +22,7 @@ public class PlayerPrefsGameStateProvider : IGameStateProvider
         }
         else
         {
-            var json = PlayerPrefs.GetString(GAME_STATE_KEY);
+            string json = PlayerPrefs.GetString(GAME_STATE_KEY);
             _gameStateOrigin = JsonUtility.FromJson<GameState>(json);
             GameState = new Game(_gameStateOrigin);
 
@@ -44,7 +41,7 @@ public class PlayerPrefsGameStateProvider : IGameStateProvider
         }
         else
         {
-            var json = PlayerPrefs.GetString(GAME_SETTINGS_STATE_KEY);
+            string json = PlayerPrefs.GetString(GAME_SETTINGS_STATE_KEY);
             _gameSettingsStateOrigin = JsonUtility.FromJson<GameSettingsState>(json);
             SettingsState = new GameSettings(_gameSettingsStateOrigin);
         }
@@ -54,7 +51,7 @@ public class PlayerPrefsGameStateProvider : IGameStateProvider
 
     public Observable<bool> SaveGameState()
     {
-        var json = JsonUtility.ToJson(_gameStateOrigin, true);
+        string json = JsonUtility.ToJson(_gameStateOrigin, true);
         PlayerPrefs.SetString(GAME_STATE_KEY, json);
 
         return Observable.Return(true);
@@ -62,7 +59,7 @@ public class PlayerPrefsGameStateProvider : IGameStateProvider
 
     public Observable<bool> SaveSettingsState()
     {
-        var json = JsonUtility.ToJson(_gameSettingsStateOrigin, true);
+        string json = JsonUtility.ToJson(_gameSettingsStateOrigin, true);
         PlayerPrefs.SetString(GAME_SETTINGS_STATE_KEY, json);
 
         return Observable.Return(true);
@@ -84,17 +81,16 @@ public class PlayerPrefsGameStateProvider : IGameStateProvider
         return Observable.Return(SettingsState);
     }
 
-    private Game CreateGameStateFromSettings()
+    Game CreateGameStateFromSettings()
     {
         // Settings needed
         _gameStateOrigin = new GameState();
         return new Game(_gameStateOrigin);
     }
 
-    private GameSettings CreateGameSettingsStateFromSettings()
+    GameSettings CreateGameSettingsStateFromSettings()
     {
-        // Состояние по умолчанию из настроек, мы делаем фейк
-        _gameSettingsStateOrigin = new GameSettingsState()
+        _gameSettingsStateOrigin = new GameSettingsState
         {
             MusicVolume = 8,
             SFXVolume = 8

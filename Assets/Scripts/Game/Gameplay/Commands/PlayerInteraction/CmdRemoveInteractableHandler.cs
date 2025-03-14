@@ -1,4 +1,4 @@
-﻿using System;
+﻿using R3;
 using UnityEngine;
 
 public class CmdRemoveInteractableHandler : ICommandHandler<CmdInteract>
@@ -11,8 +11,8 @@ public class CmdRemoveInteractableHandler : ICommandHandler<CmdInteract>
 
     public bool Handle(CmdInteract command)
     {
-        var currentLevelId = _gameState.CurrentLevelId;
-        var currentLevel = _gameState.Levels[currentLevelId.Value];
+        ReactiveProperty<int> currentLevelId = _gameState.CurrentLevelId;
+        Level currentLevel = _gameState.Levels[currentLevelId.Value];
         foreach (IInteractableEntity interactable in currentLevel.Interactables)
         {
             if (interactable.Id == command.Id && interactable.IsInteractable.Value)
@@ -21,6 +21,7 @@ public class CmdRemoveInteractableHandler : ICommandHandler<CmdInteract>
                 return true;
             }
         }
+
         Debug.Log($"Entity with id {command.Id} does not exist");
         return false;
     }

@@ -11,11 +11,13 @@ public class CmdRemoveInteractableHandler : ICommandHandler<CmdInteract>
 
     public bool Handle(CmdInteract command)
     {
-        foreach (IInteractableEntity interactable in _gameState.Interactables)
+        var currentLevelId = _gameState.CurrentLevelId;
+        var currentLevel = _gameState.Levels[currentLevelId.Value];
+        foreach (IInteractableEntity interactable in currentLevel.Interactables)
         {
             if (interactable.Id == command.Id && interactable.IsInteractable.Value)
             {
-                _gameState.Interactables.Remove(interactable);
+                currentLevel.Interactables.Remove(interactable);
                 return true;
             }
         }

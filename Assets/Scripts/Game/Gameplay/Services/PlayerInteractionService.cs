@@ -30,7 +30,7 @@ public class PlayerInteractionService
     }
     void CreateInteractableViewModel(IInteractableEntity interactableEntity)
     {
-        var interacctableViewModel = new InteractableViewModel(interactableEntity);
+        var interacctableViewModel = new InteractableViewModel(interactableEntity, this);
         _interactableMap[interactableEntity.Id] = interacctableViewModel;
         _allInteractables.Add(interacctableViewModel);
     }

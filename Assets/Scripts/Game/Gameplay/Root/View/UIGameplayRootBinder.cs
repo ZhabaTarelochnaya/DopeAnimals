@@ -8,7 +8,7 @@ public class UIGameplayRootBinder : MonoBehaviour
     public void HandleGoToGameplayButtonClick()
     {
 
-        _exitSceneSignalSubject?.OnNext(Unit.Default);
+        //_exitSceneSignalSubject?.OnNext(Unit.Default);
     }
     public void Bind(UIGameplayRootViewModel viewModel)
     {

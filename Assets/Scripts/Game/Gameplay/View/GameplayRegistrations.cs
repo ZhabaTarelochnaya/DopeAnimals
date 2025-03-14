@@ -3,19 +3,19 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-public static class GameplayRegistarations
+public static class GameplayRegistrations
 {
     public static void Register(DIContainer container, GameplayEnterParams enterParams)
     {
         var gameStateProvider = container.Resolve<PlayerPrefsGameStateProvider>();
         var gameState = gameStateProvider.GameState;
-        var settingsProviider = container.Resolve<ISettingsProvider>()
+        var settingsProviider = container.Resolve<ISettingsProvider>();
 
         var cmd = new CommandProcessor();
         cmd.RegisterHandler(new CmdPlaceInteractableHandler(gameState));
         cmd.RegisterHandler(new CmdRemoveInteractableHandler(gameState));
         cmd.RegisterHandler(new CmdInteractHandler(gameState));
-        cmd.RegisterHandler(new CmdCreateMapStateHandler(gameState, container.Resolve<GameSettings>());
+        cmd.RegisterHandler(new CmdCreateLevelStateHandler(gameState, container.Resolve<GameSettings>()));
         container.RegisterInstance<ICommandProcessor>(cmd);
 
         //Fix later. Level state should be loaded before scene load.

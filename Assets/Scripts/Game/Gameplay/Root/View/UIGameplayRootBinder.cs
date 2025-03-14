@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class UIGameplayRootBinder : MonoBehaviour
 {
-    Subject<Unit> _exitSceneSignalSubject;
+    UIGameplayRootViewModel _viewModel;
     public void HandleGoToGameplayButtonClick()
     {
+
         _exitSceneSignalSubject?.OnNext(Unit.Default);
     }
-    public void Bind(Subject<Unit> exitSceneSignalSubject)
+    public void Bind(UIGameplayRootViewModel viewModel)
     {
-        _exitSceneSignalSubject = exitSceneSignalSubject;
+        _viewModel = viewModel;
     }
 }

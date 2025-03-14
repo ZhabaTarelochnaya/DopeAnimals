@@ -2,12 +2,12 @@
 using System.Linq;
 using UnityEngine;
 
-public class CmdCreateMapStateHandler
+public class CmdCreateLevelStateHandler : ICommandHandler<CmdCreateLevelState>
 {
     private readonly Game _game;
     private readonly GameSettings _gameSettings;
 
-    public CmdCreateMapStateHandler(Game gameState, GameSettings gameSettings)
+    public CmdCreateLevelStateHandler(Game gameState, GameSettings gameSettings)
     {
         _game = gameState;
         _gameSettings = gameSettings;

@@ -15,6 +15,8 @@ public class GameplayEntryPoint : MonoBehaviour
         GameplayViewModelsRegistrations.Register(gameplayViewModelsContainer);
 
         // Для теста:
+        InitWorld(gameplayViewModelsContainer);
+        InitUI(gameplayViewModelsContainer);
 
         Debug.Log($"GAMEPLAY ENTRY POINT, level to load = {enterParams.LevelId}");
 
@@ -42,8 +44,5 @@ public class GameplayEntryPoint : MonoBehaviour
 
         var uiSceneRootViewModel = viewsContainer.Resolve<UIGameplayRootViewModel>();
         uiSceneRootBinder.Bind(uiSceneRootViewModel);
-
-        var uiManager = viewsContainer.Resolve<GameplayUIManager>();
-        uiManager.OpenScreenGameplay();
     }
 }

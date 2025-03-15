@@ -8,7 +8,7 @@ public class GameplayEntryPoint : MonoBehaviour
     [SerializeField] UIGameplayRootBinder _sceneUIRootPrefab;
     public Observable<GameplayExitParams> Run(DIContainer gameplayContainer, GameplayEnterParams enterParams)
     {
-        GameplayRegistarations.Register(gameplayContainer, enterParams);
+        GameplayRegistrations.Register(gameplayContainer, enterParams);
         var gameplayViewModelsContainer = new DIContainer(gameplayContainer);
         GameplayViewModelsRegistrations.Register(gameplayViewModelsContainer);
 

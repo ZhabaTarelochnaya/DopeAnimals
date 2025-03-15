@@ -7,7 +7,7 @@ public class SettingsProvider : ISettingsProvider
     public GameSettings GameSettings => _gameSettings;
     public ApplicationSettings ApplicationSettings { get; }
 
-    private GameSettings _gameSettings;
+    GameSettings _gameSettings;
 
     public SettingsProvider()
     {

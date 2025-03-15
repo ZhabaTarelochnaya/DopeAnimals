@@ -1,23 +1,25 @@
 ﻿using Mono.Cecil;
 using R3;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.NetworkInformation;
 using UnityEngine;
 
-public class PlayerPrefsGameStateProvider : IGameStateProvider
+public class GameStateProvider : IGameStateProvider
 {
-    private const string GAME_STATE_KEY = nameof(GAME_STATE_KEY);
-    private const string GAME_SETTINGS_STATE_KEY = nameof(GAME_SETTINGS_STATE_KEY);
-
     public Game GameState { get; private set; }
     public GameSettings SettingsState { get; private set; }
 
-    private GameState _gameStateOrigin;
-    private GameSettingsState _gameSettingsStateOrigin;
-
+    GameState _gameStateOrigin;
+    GameSettings _gameSettingsStateOrigin;
+    readonly FileDataHandler _fileDataHandler;
+    public GameStateProvider(FileDataHandler fileDataHandler)
+    {
+        _fileDataHandler = fileDataHandler;
+    }
     public Observable<Game> LoadGameState()
     {
-        if (!PlayerPrefs.HasKey(GAME_STATE_KEY))
+        if (!PlayerPrefs.HasKey(GameStateKey))
         {
             GameState = CreateGameStateFromSettings();
             Debug.Log("Game State created from settings: " + JsonUtility.ToJson(_gameStateOrigin, true));
@@ -25,7 +27,7 @@ public class PlayerPrefsGameStateProvider : IGameStateProvider
         }
         else
         {
-            var json = PlayerPrefs.GetString(GAME_STATE_KEY);
+            var json = PlayerPrefs.GetString(GameStateKey);
             _gameStateOrigin = JsonUtility.FromJson<GameState>(json);
             GameState = new Game(_gameStateOrigin);
 
@@ -37,16 +39,16 @@ public class PlayerPrefsGameStateProvider : IGameStateProvider
 
     public Observable<GameSettings> LoadSettingsState()
     {
-        if (!PlayerPrefs.HasKey(GAME_SETTINGS_STATE_KEY))
+        if (!PlayerPrefs.HasKey(GameSettingsStateKey))
         {
             SettingsState = CreateGameSettingsStateFromSettings();
             SaveSettingsState();
         }
         else
         {
-            var json = PlayerPrefs.GetString(GAME_SETTINGS_STATE_KEY);
+            var json = PlayerPrefs.GetString(GameSettingsStateKey);
             _gameSettingsStateOrigin = JsonUtility.FromJson<GameSettingsState>(json);
-            SettingsState = new GameSettings(_gameSettingsStateOrigin);
+            SettingsState = GameSettings();
         }
 
         return Observable.Return(SettingsState);
@@ -55,7 +57,7 @@ public class PlayerPrefsGameStateProvider : IGameStateProvider
     public Observable<bool> SaveGameState()
     {
         var json = JsonUtility.ToJson(_gameStateOrigin, true);
-        PlayerPrefs.SetString(GAME_STATE_KEY, json);
+        PlayerPrefs.SetString(GameStateKey, json);
 
         return Observable.Return(true);
     }
@@ -63,7 +65,7 @@ public class PlayerPrefsGameStateProvider : IGameStateProvider
     public Observable<bool> SaveSettingsState()
     {
         var json = JsonUtility.ToJson(_gameSettingsStateOrigin, true);
-        PlayerPrefs.SetString(GAME_SETTINGS_STATE_KEY, json);
+        PlayerPrefs.SetString(GameSettingsStateKey, json);
 
         return Observable.Return(true);
     }
@@ -84,22 +86,16 @@ public class PlayerPrefsGameStateProvider : IGameStateProvider
         return Observable.Return(SettingsState);
     }
 
-    private Game CreateGameStateFromSettings()
+    Game CreateGameStateFromSettings()
     {
         // Settings needed
         _gameStateOrigin = new GameState();
         return new Game(_gameStateOrigin);
     }
 
-    private GameSettings CreateGameSettingsStateFromSettings()
+    GameSettings CreateGameSettingsStateFromSettings()
     {
-        // Состояние по умолчанию из настроек, мы делаем фейк
-        _gameSettingsStateOrigin = new GameSettingsState()
-        {
-            MusicVolume = 8,
-            SFXVolume = 8
-        };
-
-        return new GameSettings(_gameSettingsStateOrigin);
+        
+        return new GameSettings();
     }
 }

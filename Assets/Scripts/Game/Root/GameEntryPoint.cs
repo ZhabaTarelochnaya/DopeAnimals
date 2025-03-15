@@ -32,7 +32,7 @@ public class GameEntryPoint
         var settingsProvider = new SettingsProvider();
         _rootContainer.RegisterInstance<ISettingsProvider>(settingsProvider);
 
-        var gameStateProvider = new PlayerPrefsGameStateProvider();
+        var gameStateProvider = new GameStateProvider();
         _rootContainer.RegisterInstance<IGameStateProvider>(gameStateProvider);
     }
     async void RunGame()

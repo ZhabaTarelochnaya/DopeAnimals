@@ -3,11 +3,11 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-public static class GameplayRegistarations
+public static class GameplayRegistrations
 {
     public static void Register(DIContainer container, GameplayEnterParams enterParams)
     {
-        var gameStateProvider = container.Resolve<PlayerPrefsGameStateProvider>();
+        var gameStateProvider = container.Resolve<GameStateProvider>();
         var gameState = gameStateProvider.GameState;
         var settingsProviider = container.Resolve<ISettingsProvider>()
 
